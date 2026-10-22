@@ -1,6 +1,7 @@
 from langgraph.graph import StateGraph, START, END
 from src.llms.groq_llm import GroqLLM
 from src.states.blog_state import BlogState
+from src.nodes.blog_node import BlogNode
 
 class GraphBuilder:
     def __init__(self, llm):
@@ -13,9 +14,11 @@ class GraphBuilder:
         Build a graph to generate blogs based on topic.
         """
 
+        self.blog_node_obj=BlogNode(self.llm)
+
         # Adding the Nodes
-        self.graph.add_node("title_creation", )
-        self.graph.add_node("content_generation", )
+        self.graph.add_node("title_creation", self.blog_node_obj.title_creation)
+        self.graph.add_node("content_generation", self.blog_node_obj.content_generation)
 
         # Adding the Edges
         self.graph.add_edge(START, "title_creation")
