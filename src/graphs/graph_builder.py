@@ -33,3 +33,15 @@ class GraphBuilder:
             self.build_topic_graph()
 
         return self.graph.compile()
+
+
+# Integrating LangSmith LangGraph Studio For Debugging
+
+## Get the LLM object
+llm=GroqLLM().get_llm()
+
+## Get The Graph
+graph_builder=GraphBuilder(llm)
+graph=graph_builder.build_topic_graph().compile()
+
+# open cmd, run -> langgraph dev
