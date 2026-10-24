@@ -45,27 +45,46 @@ class BlogNode:
             return {"blog": {"title": state['blog']['title'], "content": response.content}}
 
 
-    def translation(self, state:BlogState):
-        """
-        Translate the content to the specified language.
-        """
 
-        translation_prompt="""
-        Translate the following content into {current_language}.
-        - Maintain the original tone, style and formatting.
-        - Adapt cultural references and idioms to be appropriate for {current_language}.
 
-        ORIGINAL CONTENT:
-        {blog_content}
+    def translation(self, state: BlogState):
+        """
+        Translate both the blog title and content into the target language.
         """
 
-        blog_content = state["blog"]["content"]
-        message=[
-            HumanMessage(
-                translation_prompt.format(current_language=state["current_language"], blog_content=blog_content)
-            )
-        ]
-        translation_content=self.llm.with_structured_output(Blog).invoke(message)
+        language = state["current_language"]
+        blog = state["blog"]
+
+        title_prompt = f"""
+        Translate this blog title into {language}.
+        Return only the translated title, without explanations.
+
+        Title: {blog["title"]}
+        """
+
+        content_prompt = f"""
+        Translate the following blog content into {language}.
+        Preserve Markdown formatting, headings, links, and code blocks.
+        Return only the translated content.
+
+        Content:
+        {blog["content"]}
+        """
+
+        translated_title = self.llm.invoke(
+            [HumanMessage(content=title_prompt)]
+        )
+
+        translated_content = self.llm.invoke(
+            [HumanMessage(content=content_prompt)]
+        )
+
+        return {
+            "blog": {
+                "title": translated_title.content.strip(),
+                "content": translated_content.content.strip()
+            }
+        }
 
 
     def route(self, state: BlogState):

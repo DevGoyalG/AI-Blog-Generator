@@ -79,6 +79,7 @@ llm=GroqLLM().get_llm()
 
 ## Get The Graph
 graph_builder=GraphBuilder(llm)
-graph=graph_builder.build_topic_graph().compile()
+# graph=graph_builder.build_topic_graph().compile()
+graph=graph_builder.build_language_graph().compile()
 
 # open cmd, run -> langgraph dev

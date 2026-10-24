@@ -12,5 +12,5 @@ class GroqLLM:
             llm = ChatGroq(api_key=self.groq_api_key, model="openai/gpt-oss-120b")
             return llm
         except Exception as e:
-            raise ValueError("Error occurred with Exception : {e}")
+            raise ValueError(f"Error occurred: {e}") from e
     
