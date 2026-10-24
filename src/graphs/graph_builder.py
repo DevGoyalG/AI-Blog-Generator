@@ -38,9 +38,9 @@ class GraphBuilder:
         # Adding the Nodes
         self.graph.add_node("title_creation", self.blog_node_obj.title_creation)
         self.graph.add_node("content_generation", self.blog_node_obj.content_generation)
-        self.graph.add_node("hindi_translation", )
-        self.graph.add_node("french_translation", )
-        self.graph.add_node("route", )
+        self.graph.add_node("hindi_translation", lambda state: self.blog_node_obj.translation({**state, "current_language": "hindi"}))
+        self.graph.add_node("french_translation", lambda state: self.blog_node_obj.translation({**state, "current_language": "french"}))
+        self.graph.add_node("route", self.blog_node_obj.route)
 
         # Adding the Edges
         self.graph.add_edge(START, "title_creation")
